@@ -1,7 +1,7 @@
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
-#ifndef MASTERSRV_MASTERSRV_H
-#define MASTERSRV_MASTERSRV_H
+#ifndef ENGINE_SHARED_MASTERSERVER_H
+#define ENGINE_SHARED_MASTERSERVER_H
 static const int MASTERSERVER_PORT = 8283;
 
 enum ServerType
@@ -32,4 +32,4 @@ static const unsigned char SERVERBROWSE_FWRESPONSE[] = {255, 255, 255, 255, 'f',
 static const unsigned char SERVERBROWSE_FWOK[] = {255, 255, 255, 255, 'f', 'w', 'o', 'k'};
 static const unsigned char SERVERBROWSE_FWERROR[] = {255, 255, 255, 255, 'f', 'w', 'e', 'r'};
 
-#endif
+#endif // ENGINE_SHARED_MASTERSERVER_H

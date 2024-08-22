@@ -152,7 +152,6 @@ public:
 	CServerBan m_ServerBan;
 
 	IEngineMap *m_pMap;
-	IMapChecker *m_pMapChecker;
 
 	int64_t m_GameStartTime;
 	bool m_RunServer;

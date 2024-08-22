@@ -8,9 +8,8 @@
 #include <engine/masterserver.h>
 #include <engine/storage.h>
 
-#include <mastersrv/mastersrv.h>
-
 #include "linereader.h"
+#include "masterserver.h"
 
 class CMasterServer : public IEngineMasterServer
 {

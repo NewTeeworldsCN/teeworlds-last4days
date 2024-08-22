@@ -18,14 +18,12 @@
 #include <engine/shared/demo.h>
 #include <engine/shared/econ.h>
 #include <engine/shared/filecollection.h>
-#include <engine/shared/mapchecker.h>
+#include <engine/shared/masterserver.h>
 #include <engine/shared/netban.h>
 #include <engine/shared/network.h>
 #include <engine/shared/packer.h>
 #include <engine/shared/protocol.h>
 #include <engine/shared/snapshot.h>
-
-#include <mastersrv/mastersrv.h>
 
 #include "register.h"
 #include "server.h"
@@ -1215,13 +1213,6 @@ int CServer::LoadMap(const char *pMapName)
 	char aBuf[IO_MAX_PATH_LENGTH];
 	str_format(aBuf, sizeof(aBuf), "maps/%s.map", pMapName);
 
-	// check for valid standard map
-	if(!m_pMapChecker->ReadAndValidateMap(aBuf, IStorage::TYPE_ALL))
-	{
-		Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "mapchecker", "invalid standard map");
-		return 0;
-	}
-
 	if(!m_pMap->Load(aBuf))
 		return 0;
 
@@ -1269,7 +1260,6 @@ void CServer::InitInterfaces(IKernel *pKernel)
 	m_pConsole = pKernel->RequestInterface<IConsole>();
 	m_pGameServer = pKernel->RequestInterface<IGameServer>();
 	m_pMap = pKernel->RequestInterface<IEngineMap>();
-	m_pMapChecker = pKernel->RequestInterface<IMapChecker>();
 	m_pStorage = pKernel->RequestInterface<IStorage>();
 }
 
@@ -1499,8 +1489,6 @@ int CServer::MapListEntryCallback(const char *pFilename, int IsDir, int DirType,
 	aFilename[pSuffix - aFilename] = 0; // remove suffix
 
 	if(str_length(aFilename) >= IConsole::TEMPMAP_NAME_LENGTH)
-		return 0;
-	if(pUserdata->m_StandardOnly && !pThis->m_pMapChecker->IsStandardMap(aFilename))
 		return 0;
 
 	pThis->m_lMaps.add(CMapListEntry(aFilename));
@@ -1851,7 +1839,6 @@ int main(int argc, const char **argv)
 	int FlagMask = CFGFLAG_SERVER|CFGFLAG_ECON;
 	IEngine *pEngine = CreateEngine("Teeworlds_Server");
 	IEngineMap *pEngineMap = CreateEngineMap();
-	IMapChecker *pMapChecker = CreateMapChecker();
 	IGameServer *pGameServer = CreateGameServer();
 	IConsole *pConsole = CreateConsole(CFGFLAG_SERVER|CFGFLAG_ECON);
 	IEngineMasterServer *pEngineMasterServer = CreateEngineMasterServer();
@@ -1867,7 +1854,6 @@ int main(int argc, const char **argv)
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(pEngine);
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(static_cast<IEngineMap*>(pEngineMap)); // register as both
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(static_cast<IMap*>(pEngineMap));
-		RegisterFail = RegisterFail || !pKernel->RegisterInterface(pMapChecker);
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(pGameServer);
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(pConsole);
 		RegisterFail = RegisterFail || !pKernel->RegisterInterface(pStorage);
@@ -1915,7 +1901,6 @@ int main(int argc, const char **argv)
 	delete pKernel;
 	delete pEngine;
 	delete pEngineMap;
-	delete pMapChecker;
 	delete pGameServer;
 	delete pConsole;
 	delete pEngineMasterServer;

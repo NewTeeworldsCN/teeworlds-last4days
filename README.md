@@ -1,6 +1,7 @@
-<a href="https://repology.org/metapackage/teeworlds/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/teeworlds.svg" alt="Packaging status" align="right">
-</a>
+Teeworlds Last4Days ![GitHub Actions](https://github.com/NewTeeworldsCN/teeworlds-last4days/workflows/Build/badge.svg)
+===================
+
+A hardcore teeworlds MMORPG mode.
 
 Teeworlds ![GitHub Actions](https://github.com/teeworlds/teeworlds/workflows/Build/badge.svg)
 =========
