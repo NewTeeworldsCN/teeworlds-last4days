@@ -3,8 +3,8 @@
 #ifndef ENGINE_ENGINE_H
 #define ENGINE_ENGINE_H
 
-#include "kernel.h"
 #include <engine/shared/jobs.h>
+#include "kernel.h"
 
 class CHostLookup
 {

@@ -22,7 +22,7 @@ static void ExpectAddString5(const char *pString, int Limit, const char *pExpect
 		EXPECT_EQ(ExpectedLength, Packer.Size() - OFFSET);
 		if(ExpectedLength == Packer.Size() - OFFSET)
 		{
-			EXPECT_STREQ(pExpected, (const char *)Packer.Data() + OFFSET);
+			EXPECT_STREQ(pExpected, (const char *) Packer.Data() + OFFSET);
 		}
 	}
 }
@@ -56,7 +56,9 @@ TEST(Packer, AddStringBroken)
 	ExpectAddString5("\x80", 0, "�");
 	ExpectAddString5("\x80\x80", 0, 0);
 	ExpectAddString5("a\x80", 0, "a�");
-	ExpectAddString5("\x80""a", 0, "�a");
+	ExpectAddString5("\x80"
+			 "a",
+		0, "�a");
 	ExpectAddString5("\x80", 1, "");
 	ExpectAddString5("\x80\x80", 3, "�");
 	ExpectAddString5("\x80\x80", 5, "�");
@@ -106,7 +108,7 @@ TEST(Packer, UnpackerRawNoSize)
 	CUnpacker Unpacker;
 	Unpacker.Reset(aBuf, sizeof(aBuf));
 	EXPECT_EQ(false, Unpacker.Error());
-	EXPECT_EQ((const unsigned char *)0x0, Unpacker.GetRaw(0));
+	EXPECT_EQ((const unsigned char *) 0x0, Unpacker.GetRaw(0));
 	EXPECT_EQ(true, Unpacker.Error());
 }
 

@@ -10,7 +10,6 @@
 #include "gamecontroller.h"
 #include "player.h"
 
-
 CGameController::CGameController(CGameContext *pGameServer)
 {
 	m_pGameServer = pGameServer;
@@ -31,7 +30,7 @@ CGameController::CGameController(CGameContext *pGameServer)
 	m_aNumSpawnPoints[2] = 0;
 }
 
-//activity
+// activity
 void CGameController::DoActivityCheck()
 {
 	if(Config()->m_SvInactiveKickTime == 0)
@@ -40,7 +39,7 @@ void CGameController::DoActivityCheck()
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
 		if(GameServer()->m_apPlayers[i] && !GameServer()->m_apPlayers[i]->IsDummy() && (GameServer()->m_apPlayers[i]->GetTeam() != TEAM_SPECTATORS || Config()->m_SvInactiveKick > 0) &&
-			!Server()->IsAuthed(i) && (GameServer()->m_apPlayers[i]->m_InactivityTickCounter > Config()->m_SvInactiveKickTime*Server()->TickSpeed()*60))
+			!Server()->IsAuthed(i) && (GameServer()->m_apPlayers[i]->m_InactivityTickCounter > Config()->m_SvInactiveKickTime * Server()->TickSpeed() * 60))
 		{
 			if(GameServer()->m_apPlayers[i]->GetTeam() == TEAM_SPECTATORS)
 			{
@@ -52,29 +51,29 @@ void CGameController::DoActivityCheck()
 				switch(Config()->m_SvInactiveKick)
 				{
 				case 1:
-					{
-						// move player to spectator
-						DoTeamChange(GameServer()->m_apPlayers[i], TEAM_SPECTATORS);
-					}
-					break;
+				{
+					// move player to spectator
+					DoTeamChange(GameServer()->m_apPlayers[i], TEAM_SPECTATORS);
+				}
+				break;
 				case 2:
-					{
-						// move player to spectator if the reserved slots aren't filled yet, kick him otherwise
-						int Spectators = 0;
-						for(int j = 0; j < MAX_CLIENTS; ++j)
-							if(GameServer()->m_apPlayers[j] && GameServer()->m_apPlayers[j]->GetTeam() == TEAM_SPECTATORS)
-								++Spectators;
-						if(Spectators >= Config()->m_SvMaxClients - Config()->m_SvPlayerSlots)
-							Server()->Kick(i, "Kicked for inactivity");
-						else
-							DoTeamChange(GameServer()->m_apPlayers[i], TEAM_SPECTATORS);
-					}
-					break;
-				case 3:
-					{
-						// kick the player
+				{
+					// move player to spectator if the reserved slots aren't filled yet, kick him otherwise
+					int Spectators = 0;
+					for(int j = 0; j < MAX_CLIENTS; ++j)
+						if(GameServer()->m_apPlayers[j] && GameServer()->m_apPlayers[j]->GetTeam() == TEAM_SPECTATORS)
+							++Spectators;
+					if(Spectators >= Config()->m_SvMaxClients - Config()->m_SvPlayerSlots)
 						Server()->Kick(i, "Kicked for inactivity");
-					}
+					else
+						DoTeamChange(GameServer()->m_apPlayers[i], TEAM_SPECTATORS);
+				}
+				break;
+				case 3:
+				{
+					// kick the player
+					Server()->Kick(i, "Kicked for inactivity");
+				}
 				}
 			}
 		}
@@ -94,11 +93,10 @@ int CGameController::OnCharacterDeath(CCharacter *pVictim, CPlayer *pKiller, int
 		pKiller->m_Score++; // normal kill
 	}
 	if(Weapon == WEAPON_SELF)
-		pVictim->GetPlayer()->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()*3.0f;
-
+		pVictim->GetPlayer()->m_RespawnTick = Server()->Tick() + Server()->TickSpeed() * 3.0f;
 
 	// update spectator modes for dead players in survival
-	if(m_GameFlags&GAMEFLAG_SURVIVAL)
+	if(m_GameFlags & GAMEFLAG_SURVIVAL)
 	{
 		for(int i = 0; i < MAX_CLIENTS; ++i)
 			if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->m_DeadSpecMode)
@@ -121,7 +119,7 @@ void CGameController::OnCharacterSpawn(CCharacter *pChr)
 bool CGameController::OnEntity(int Index, vec2 Pos)
 {
 	// don't add pickups in survival
-	if(m_GameFlags&GAMEFLAG_SURVIVAL)
+	if(m_GameFlags & GAMEFLAG_SURVIVAL)
 	{
 		if(Index < ENTITY_SPAWN || Index > ENTITY_SPAWN_BLUE)
 			return false;
@@ -220,7 +218,7 @@ void CGameController::OnReset()
 		{
 			GameServer()->m_apPlayers[i]->m_RespawnDisabled = false;
 			GameServer()->m_apPlayers[i]->Respawn();
-			GameServer()->m_apPlayers[i]->m_RespawnTick = Server()->Tick()+Server()->TickSpeed() / 2;
+			GameServer()->m_apPlayers[i]->m_RespawnTick = Server()->Tick() + Server()->TickSpeed() / 2;
 			GameServer()->m_apPlayers[i]->m_Score = 0;
 			GameServer()->m_apPlayers[i]->m_ScoreStartTick = Server()->Tick();
 			GameServer()->m_apPlayers[i]->m_IsReadyToPlay = true;
@@ -288,13 +286,13 @@ void CGameController::SendGameInfo(int ClientID)
 				continue;
 
 			CNetMsg_Sv_GameInfo *pInfoMsg = (Server()->GetClientVersion(i) < CGameContext::MIN_RACE_CLIENTVERSION) ? &GameInfoMsgNoRace : &GameInfoMsg;
-			Server()->SendPackMsg(pInfoMsg, MSGFLAG_VITAL|MSGFLAG_NORECORD, i);
+			Server()->SendPackMsg(pInfoMsg, MSGFLAG_VITAL | MSGFLAG_NORECORD, i);
 		}
 	}
 	else
 	{
 		CNetMsg_Sv_GameInfo *pInfoMsg = (Server()->GetClientVersion(ClientID) < CGameContext::MIN_RACE_CLIENTVERSION) ? &GameInfoMsgNoRace : &GameInfoMsg;
-		Server()->SendPackMsg(pInfoMsg, MSGFLAG_VITAL|MSGFLAG_NORECORD, ClientID);
+		Server()->SendPackMsg(pInfoMsg, MSGFLAG_VITAL | MSGFLAG_NORECORD, ClientID);
 	}
 }
 
@@ -320,7 +318,7 @@ float CGameController::EvaluateSpawnPos(CSpawnEval *pEval, vec2 Pos) const
 {
 	float Score = 0.0f;
 	CCharacter *pC = static_cast<CCharacter *>(GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_CHARACTER));
-	for(; pC; pC = (CCharacter *)pC->TypeNext())
+	for(; pC; pC = (CCharacter *) pC->TypeNext())
 	{
 		// team mates are not as dangerous as enemies
 		float Scoremod = 1.0f;
@@ -328,7 +326,7 @@ float CGameController::EvaluateSpawnPos(CSpawnEval *pEval, vec2 Pos) const
 			Scoremod = 0.5f;
 
 		float d = distance(Pos, pC->GetPos());
-		Score += Scoremod * (d == 0 ? 1000000000.0f : 1.0f/d);
+		Score += Scoremod * (d == 0 ? 1000000000.0f : 1.0f / d);
 	}
 
 	return Score;
@@ -341,24 +339,24 @@ void CGameController::EvaluateSpawnType(CSpawnEval *pEval, int Type) const
 	{
 		// check if the position is occupado
 		CCharacter *aEnts[MAX_CLIENTS];
-		int Num = GameServer()->m_World.FindEntities(m_aaSpawnPoints[Type][i], 64, (CEntity**)aEnts, MAX_CLIENTS, CGameWorld::ENTTYPE_CHARACTER);
-		vec2 Positions[5] = { vec2(0.0f, 0.0f), vec2(-32.0f, 0.0f), vec2(0.0f, -32.0f), vec2(32.0f, 0.0f), vec2(0.0f, 32.0f) };	// start, left, up, right, down
+		int Num = GameServer()->m_World.FindEntities(m_aaSpawnPoints[Type][i], 64, (CEntity **) aEnts, MAX_CLIENTS, CGameWorld::ENTTYPE_CHARACTER);
+		vec2 Positions[5] = {vec2(0.0f, 0.0f), vec2(-32.0f, 0.0f), vec2(0.0f, -32.0f), vec2(32.0f, 0.0f), vec2(0.0f, 32.0f)}; // start, left, up, right, down
 		int Result = -1;
 		for(int Index = 0; Index < 5 && Result == -1; ++Index)
 		{
 			Result = Index;
 			for(int c = 0; c < Num; ++c)
-				if(GameServer()->Collision()->CheckPoint(m_aaSpawnPoints[Type][i]+Positions[Index]) ||
-					distance(aEnts[c]->GetPos(), m_aaSpawnPoints[Type][i]+Positions[Index]) <= aEnts[c]->GetProximityRadius())
+				if(GameServer()->Collision()->CheckPoint(m_aaSpawnPoints[Type][i] + Positions[Index]) ||
+					distance(aEnts[c]->GetPos(), m_aaSpawnPoints[Type][i] + Positions[Index]) <= aEnts[c]->GetProximityRadius())
 				{
 					Result = -1;
 					break;
 				}
 		}
 		if(Result == -1)
-			continue;	// try next spawn point
+			continue; // try next spawn point
 
-		vec2 P = m_aaSpawnPoints[Type][i]+Positions[Result];
+		vec2 P = m_aaSpawnPoints[Type][i] + Positions[Result];
 		float S = pEval->m_RandomSpawn ? (Result + random_float()) : EvaluateSpawnPos(pEval, P);
 		if(!pEval->m_Got || pEval->m_Score > S)
 		{
@@ -368,7 +366,6 @@ void CGameController::EvaluateSpawnType(CSpawnEval *pEval, int Type) const
 		}
 	}
 }
-
 
 // team
 bool CGameController::CanChangeTeam(CPlayer *pPlayer, int JoinTeam) const

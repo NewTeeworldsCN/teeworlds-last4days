@@ -2,7 +2,8 @@
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include "jsonparser.h"
 
-CJsonParser::CJsonParser() : m_pParsedJson(0x0)
+CJsonParser::CJsonParser() :
+	m_pParsedJson(0x0)
 {
 	m_aError[0] = '\0';
 }

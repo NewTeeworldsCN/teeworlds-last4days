@@ -3,8 +3,8 @@
 #ifndef GAME_SERVER_GAMECONTROLLER_H
 #define GAME_SERVER_GAMECONTROLLER_H
 
-#include <base/vmath.h>
 #include <base/tl/array.h>
+#include <base/vmath.h>
 
 #include <game/commands.h>
 
@@ -33,7 +33,7 @@ class CGameController
 		{
 			m_Got = false;
 			m_FriendlyTeam = -1;
-			m_Pos = vec2(100,100);
+			m_Pos = vec2(100, 100);
 		}
 
 		vec2 m_Pos;
@@ -127,10 +127,10 @@ public:
 	const char *GetGameType() const { return m_pGameType; }
 	int GetRealPlayerNum() const { return m_RealPlayerNum; }
 
-	//spawn
+	// spawn
 	bool CanSpawn(int Team, vec2 *pPos) const;
 
-	//static void Com_Example(IConsole::IResult *pResult, void *pContext);
+	// static void Com_Example(IConsole::IResult *pResult, void *pContext);
 	void RegisterChatCommands(CCommandManager *pManager);
 };
 
