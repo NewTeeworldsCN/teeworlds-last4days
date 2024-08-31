@@ -14,10 +14,6 @@
 
 using std::size_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef __GNUC__
 #define GNUC_ATTRIBUTE(x) __attribute__(x)
 #else
@@ -2008,9 +2004,5 @@ unsigned bytes_be_to_uint(const unsigned char *bytes);
 		- Assumes unsigned is 4 bytes
 */
 void uint_to_bytes_be(unsigned char *bytes, unsigned value);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

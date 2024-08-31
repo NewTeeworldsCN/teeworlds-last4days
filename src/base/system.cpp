@@ -56,10 +56,6 @@
 #include <sys/filio.h>
 #endif
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 IOHANDLE io_stdin() { return (IOHANDLE) stdin; }
 IOHANDLE io_stdout() { return (IOHANDLE) stdout; }
 IOHANDLE io_stderr() { return (IOHANDLE) stderr; }
@@ -1055,7 +1051,7 @@ typedef struct SEMINTERNAL
 
 void sphore_init(SEMAPHORE *sem)
 {
-	*sem = mem_alloc(sizeof(**sem));
+	*sem = (SEMAPHORE) mem_alloc(sizeof(**sem));
 
 	(*sem)->count = 0;
 	(*sem)->waiters = 0;
@@ -3450,7 +3446,3 @@ void uint_to_bytes_be(unsigned char *bytes, unsigned value)
 	bytes[2] = (value >> 8u) & 0xffu;
 	bytes[3] = value & 0xffu;
 }
-
-#if defined(__cplusplus)
-}
-#endif

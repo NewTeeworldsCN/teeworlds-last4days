@@ -390,7 +390,7 @@ public:
 		return 0;
 	}
 
-	bool ReadFile(const char *pFilename, int Type, void **ppResult, unsigned *pResultLen)
+	bool ReadFile(const char *pFilename, int Type, void **ppResult, unsigned *pResultLen) override
 	{
 		IOHANDLE File = OpenFile(pFilename, IOFLAG_READ, Type);
 		if(!File)
@@ -404,7 +404,7 @@ public:
 		return true;
 	}
 
-	char *ReadFileStr(const char *pFilename, int Type)
+	char *ReadFileStr(const char *pFilename, int Type) override
 	{
 		IOHANDLE File = OpenFile(pFilename, IOFLAG_READ | IOFLAG_SKIP_BOM, Type);
 		if(!File)

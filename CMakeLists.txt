@@ -25,7 +25,9 @@ if(NOT POLICY CMP0048)
   set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 endif()
 
-project(teeworlds VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+project(teeworlds-last4days VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+
+set(CMAKE_CXX_STANDARD 17)
 
 set(ORIGINAL_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
 set(ORIGINAL_CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES})
@@ -444,6 +446,45 @@ set(DEP_MD5)
 if(NOT CRYPTO_FOUND)
   set(DEP_MD5 $<TARGET_OBJECTS:md5>)
 endif()
+
+########################################################################
+# DATA
+########################################################################
+
+set(EXPECTED_DATA
+  mapres/createdir.txt
+  maps/ctf1.map
+  maps/ctf2.map
+  maps/ctf3.map
+  maps/ctf4.map
+  maps/ctf5.map
+  maps/ctf6.map
+  maps/ctf7.map
+  maps/ctf8.map
+  maps/dm1.map
+  maps/dm2.map
+  maps/dm3.map
+  maps/dm6.map
+  maps/dm7.map
+  maps/dm8.map
+  maps/dm9.map
+  maps/license.txt
+  maps/lms1.map
+  maps/readme.txt
+)
+
+set_glob(DATA GLOB_RECURSE "json;map;png;rules;ttc;ttf;txt;wv" data ${EXPECTED_DATA})
+
+########################################################################
+# COPY DATA
+########################################################################
+
+foreach(datafile ${DATA})
+  file(RELATIVE_PATH OUT ${PROJECT_SOURCE_DIR}/data ${datafile})
+  get_filename_component(DESTINATION data/${OUT} PATH)
+  file(MAKE_DIRECTORY ${DESTINATION})
+  file(COPY ${datafile} DESTINATION ${DESTINATION})
+endforeach()
 
 ########################################################################
 # CODE GENERATION
