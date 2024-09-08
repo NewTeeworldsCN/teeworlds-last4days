@@ -146,7 +146,7 @@ public:
 	}
 
 	CTuningParams m_Tuning;
-	class CCharacterCore *m_apCharacters[MAX_CLIENTS];
+	class CCharacterCore *m_apCharacters[MAX_PLAYERS];
 };
 
 class CCharacterCore

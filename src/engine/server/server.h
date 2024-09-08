@@ -140,7 +140,7 @@ public:
 		void Reset();
 	};
 
-	CClient m_aClients[MAX_CLIENTS];
+	CClient m_aClients[MAX_PLAYERS];
 
 	CSnapshotDelta m_SnapshotDelta;
 	CSnapshotBuilder m_SnapshotBuilder;

@@ -36,7 +36,7 @@ void CGameController::DoActivityCheck()
 	if(Config()->m_SvInactiveKickTime == 0)
 		return;
 
-	for(int i = 0; i < MAX_CLIENTS; ++i)
+	for(int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if(GameServer()->m_apPlayers[i] && !GameServer()->m_apPlayers[i]->IsDummy() && (GameServer()->m_apPlayers[i]->GetTeam() != TEAM_SPECTATORS || Config()->m_SvInactiveKick > 0) &&
 			!Server()->IsAuthed(i) && (GameServer()->m_apPlayers[i]->m_InactivityTickCounter > Config()->m_SvInactiveKickTime * Server()->TickSpeed() * 60))
@@ -60,7 +60,7 @@ void CGameController::DoActivityCheck()
 				{
 					// move player to spectator if the reserved slots aren't filled yet, kick him otherwise
 					int Spectators = 0;
-					for(int j = 0; j < MAX_CLIENTS; ++j)
+					for(int j = 0; j < MAX_PLAYERS; ++j)
 						if(GameServer()->m_apPlayers[j] && GameServer()->m_apPlayers[j]->GetTeam() == TEAM_SPECTATORS)
 							++Spectators;
 					if(Spectators >= Config()->m_SvMaxClients - Config()->m_SvPlayerSlots)
@@ -98,7 +98,7 @@ int CGameController::OnCharacterDeath(CCharacter *pVictim, CPlayer *pKiller, int
 	// update spectator modes for dead players in survival
 	if(m_GameFlags & GAMEFLAG_SURVIVAL)
 	{
-		for(int i = 0; i < MAX_CLIENTS; ++i)
+		for(int i = 0; i < MAX_PLAYERS; ++i)
 			if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->m_DeadSpecMode)
 				GameServer()->m_apPlayers[i]->UpdateDeadSpecMode();
 	}
@@ -212,7 +212,7 @@ void CGameController::OnPlayerReadyChange(CPlayer *pPlayer)
 
 void CGameController::OnReset()
 {
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if(GameServer()->m_apPlayers[i])
 		{
@@ -280,7 +280,7 @@ void CGameController::SendGameInfo(int ClientID)
 
 	if(ClientID == -1)
 	{
-		for(int i = 0; i < MAX_CLIENTS; ++i)
+		for(int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			if(!GameServer()->m_apPlayers[i] || !Server()->ClientIngame(i))
 				continue;
@@ -338,8 +338,8 @@ void CGameController::EvaluateSpawnType(CSpawnEval *pEval, int Type) const
 	for(int i = 0; i < m_aNumSpawnPoints[Type]; i++)
 	{
 		// check if the position is occupado
-		CCharacter *aEnts[MAX_CLIENTS];
-		int Num = GameServer()->m_World.FindEntities(m_aaSpawnPoints[Type][i], 64, (CEntity **) aEnts, MAX_CLIENTS, CGameWorld::ENTTYPE_CHARACTER);
+		CCharacter *aEnts[MAX_PLAYERS];
+		int Num = GameServer()->m_World.FindEntities(m_aaSpawnPoints[Type][i], 64, (CEntity **) aEnts, MAX_PLAYERS, CGameWorld::ENTTYPE_CHARACTER);
 		vec2 Positions[5] = {vec2(0.0f, 0.0f), vec2(-32.0f, 0.0f), vec2(0.0f, -32.0f), vec2(32.0f, 0.0f), vec2(0.0f, 32.0f)}; // start, left, up, right, down
 		int Result = -1;
 		for(int Index = 0; Index < 5 && Result == -1; ++Index)

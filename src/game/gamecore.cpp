@@ -205,7 +205,7 @@ void CCharacterCore::Tick(bool UseInput)
 		if(m_pWorld && m_pWorld->m_Tuning.m_PlayerHooking)
 		{
 			float Distance = 0.0f;
-			for(int i = 0; i < MAX_CLIENTS; i++)
+			for(int i = 0; i < MAX_PLAYERS; i++)
 			{
 				CCharacterCore *pCharCore = m_pWorld->m_apCharacters[i];
 				if(!pCharCore || pCharCore == this)
@@ -298,7 +298,7 @@ void CCharacterCore::Tick(bool UseInput)
 
 	if(m_pWorld)
 	{
-		for(int i = 0; i < MAX_CLIENTS; i++)
+		for(int i = 0; i < MAX_PLAYERS; i++)
 		{
 			CCharacterCore *pCharCore = m_pWorld->m_apCharacters[i];
 			if(!pCharCore)
@@ -385,7 +385,7 @@ void CCharacterCore::Move()
 		{
 			float a = i / Distance;
 			vec2 Pos = mix(m_Pos, NewPos, a);
-			for(int p = 0; p < MAX_CLIENTS; p++)
+			for(int p = 0; p < MAX_PLAYERS; p++)
 			{
 				CCharacterCore *pCharCore = m_pWorld->m_apCharacters[p];
 				if(!pCharCore || pCharCore == this)
