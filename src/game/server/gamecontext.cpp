@@ -236,11 +236,19 @@ void CGameContext::SendChat(int ChatterClientID, int Mode, int To, const char *p
 				Server()->SendPackMsg(&Msg, MSGFLAG_VITAL | MSGFLAG_NORECORD, i);
 		}
 	}
-	else // Mode == CHAT_WHISPER
+	else if(Mode == CHAT_WHISPER)
 	{
 		// send to the clients
 		Msg.m_TargetID = To;
 		Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, ChatterClientID);
+		Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, To);
+	}
+	else // Mode == CHAT_NONE (CHAT_SYSTEM)
+	{
+		// send to the target
+		Msg.m_Mode = CHAT_WHISPER;
+		Msg.m_ClientID = -1;
+		Msg.m_TargetID = To;
 		Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, To);
 	}
 }
@@ -849,12 +857,11 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 			// call command when chat, this is for ddnet players (18.4+, not include 18.4)
 			if(pMsg->m_pMessage[0] == '/')
 			{
-				const char *pCommandStr = pMsg->m_pMessage;
-
 				char aCommand[16];
-				str_format(aCommand, sizeof(aCommand), "%.*s", str_span(pCommandStr + 1, " "), pCommandStr + 1);
+				str_format(aCommand, sizeof(aCommand), "%.*s", str_span(pMsg->m_pMessage + 1, " "), pMsg->m_pMessage + 1);
 
-				CommandManager()->OnCommand(aCommand, str_skip_whitespaces_const(str_skip_to_whitespace_const(pCommandStr)), ClientID);
+				if(CommandManager()->OnCommand(aCommand, str_skip_whitespaces_const(str_skip_to_whitespace_const(pMsg->m_pMessage)), ClientID))
+					SendChat(-1, CHAT_NONE, ClientID, "No such command");
 				return;
 			}
 
