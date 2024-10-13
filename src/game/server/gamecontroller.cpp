@@ -22,7 +22,7 @@ CGameController::CGameController(CGameContext *pGameServer)
 	// info
 	m_GameFlags = 0;
 	m_RealPlayerNum = 0;
-	m_pGameType = "Last4Days  Catch";
+	m_pGameType = "ProjectTee Catch";
 
 	// spawn
 	m_aNumSpawnPoints[0] = 0;

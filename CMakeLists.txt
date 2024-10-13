@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.12...3.27.4)
 
 file(STRINGS src/game/version.h VERSION_LINE
   LIMIT_COUNT 1
-  REGEX GAME_RELEASE_VERSION
+  REGEX MOD_VERSION
 )
 
-if(VERSION_LINE MATCHES "\"([0-9]+)\\.([0-9]+)\\.([0-9]+|[0-9]+\\.[0-9]+)\"")
-  set(VERSION_MAJOR ${CMAKE_MATCH_1})
-  set(VERSION_MINOR ${CMAKE_MATCH_2})
-  set(VERSION_PATCH ${CMAKE_MATCH_3})
-elseif(VERSION_LINE MATCHES "\"([0-9]+)\\.([0-9]+)\"")
-  set(VERSION_MAJOR ${CMAKE_MATCH_1})
-  set(VERSION_MINOR ${CMAKE_MATCH_2})
+if(VERSION_LINE MATCHES "\"([a-z])([0-9]+)\\.([0-9]+)\\.([0-9]+|[0-9]+\\.[0-9]+)\"")
+  set(VERSION_MAJOR ${CMAKE_MATCH_2})
+  set(VERSION_MINOR ${CMAKE_MATCH_3})
+  set(VERSION_PATCH ${CMAKE_MATCH_4})
+elseif(VERSION_LINE MATCHES "\"([a-z])([0-9]+)\\.([0-9]+)\"")
+  set(VERSION_MAJOR ${CMAKE_MATCH_2})
+  set(VERSION_MINOR ${CMAKE_MATCH_3})
   set(VERSION_PATCH "0")
 else()
   message(FATAL_ERROR "Couldn't parse version from src/game/version.h")
@@ -25,7 +25,7 @@ if(NOT POLICY CMP0048)
   set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 endif()
 
-project(teeworlds-last4days VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+project(project-tee VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 17)
 

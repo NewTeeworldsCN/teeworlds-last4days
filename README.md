@@ -1,7 +1,9 @@
-Teeworlds Last4Days ![GitHub Actions](https://github.com/NewTeeworldsCN/teeworlds-last4days/workflows/Build/badge.svg)
+Teeworlds ProjectTee ![GitHub Actions](https://github.com/NewTeeworldsCN/teeworlds-last4days/workflows/Build/badge.svg)
 ===================
 
-A hardcore teeworlds MMORPG mode.
+Last 4 days....
+
+This is a hardcore teeworlds MMORPG mode.
 
 Teeworlds ![GitHub Actions](https://github.com/teeworlds/teeworlds/workflows/Build/badge.svg)
 =========
